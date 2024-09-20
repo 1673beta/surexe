@@ -1,6 +1,7 @@
 use anyhow::Result;
 use curl::easy::{Easy, List};
 use serde::Deserialize;
+use termimad::MadSkin;
 
 #[derive(Deserialize)]
 struct Response {
@@ -50,9 +51,10 @@ pub fn post_gemini(parts: Vec<&str>, api_key: &str) -> Result<String> {
 
 pub fn display_response(res: &str) -> Result<()> {
     let parsed: Response = serde_json::from_str(res)?;
+    let skin = MadSkin::default();
     for candidate in parsed.candidates {
         for part in candidate.content.parts {
-            println!("{}", part.text);
+            skin.print_text(&part.text);
         }
     }
     Ok(())
