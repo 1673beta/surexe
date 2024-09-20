@@ -10,5 +10,6 @@ anyhow = "1.0.89"
 nu-ansi-term = "0.49"
 serde ={ version = "1.0.210", features = ["derive"] }
 serde_derive = "1.0.210"
+serde_json = "1.0.128"
 confy = "0.6.1"
 curl = "0.4.46"
