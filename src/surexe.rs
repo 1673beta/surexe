@@ -10,7 +10,7 @@ struct Response {
 
 #[derive(Deserialize)]
 struct Candidate {
-    content: Content,
+    content: Option<Content>, // contentフィールドが存在しない場合に備えてOptionに変更
 }
 
 #[derive(Deserialize)]
@@ -53,8 +53,12 @@ pub fn display_response(res: &str) -> Result<()> {
     let parsed: Response = serde_json::from_str(res)?;
     let skin = MadSkin::default();
     for candidate in parsed.candidates {
-        for part in candidate.content.parts {
-            skin.print_text(&part.text);
+        if let Some(content) = candidate.content {
+            for part in content.parts {
+                skin.print_text(&part.text);
+            }
+        } else {
+            eprintln!("No content found in candidate");
         }
     }
     Ok(())

@@ -1,7 +1,9 @@
 mod config;
 mod surexe;
+mod execute;
 
 use clap::{Subcommand, Parser};
+use dialoguer::Confirm;
 use surexe::post_gemini;
 
 #[derive(Parser)]
@@ -50,6 +52,13 @@ fn main() {
                     Ok(res) => {
                         if let Err(e) = surexe::display_response(&res) {
                             eprintln!("{}", e);
+                        } else {
+                            if Confirm::new().with_prompt("このコマンドを実行しますか?").interact().unwrap() {
+                                println!("コマンドを実行します: {}", command);
+                                let _ = execute::execute(&command);
+                            } else {
+                                println!("コマンドを実行しませんでした: {}", command);
+                            }
                         }
                     }
                     Err(e) => eprintln!("{}", e),
